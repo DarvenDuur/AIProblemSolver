@@ -21,8 +21,6 @@ public class BaseAIapplication {
         
         System.out.println(pb.toString());
         System.out.println(pb.solve().toString(true));
-        
-        
     }
     
 }
