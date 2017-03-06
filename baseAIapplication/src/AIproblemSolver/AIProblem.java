@@ -17,20 +17,20 @@ import java.util.LinkedList;
  *      State defined for the problem, restrict actions and state inputs
  */
 public class AIProblem <TState extends AbstractState> {
-    
+    //for debug use only, will display a lot more informations
     private static final boolean DEBUG = false;
     
-    /*
-    actions: list of action
-    INIT_STATE: initial state
-    ADD_MODE: mode used to add to the tree
-    */
+    //actions: list of action
     private final LinkedList<AbstractAction<TState>> actions = new LinkedList<>();
+    
+    //INIT_STATE: initial state
     private final TState INIT_STATE;
+    
+    //mode used to add to the tree
     private final String ADD_MODE;
     
     /* SEARCH MODES
-    COST_SEARCH: search by cost ?
+    COST_SEARCH: search by cost, uses compareTo()
     DEPTH_SEARCH
     WIDTH_SEARCH
     A_STAR_SEARCH: A* algorithm (https://en.wikipedia.org/wiki/A*_search_algorithm)

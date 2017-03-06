@@ -6,9 +6,6 @@
 package AIproblemSolver;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * Path listing all states and actions used to reach the current state
@@ -16,14 +13,10 @@ import java.util.logging.Logger;
  */
 public class LinkedPath implements Cloneable, Comparable<LinkedPath> {
     //parent path, containing all previous nodes
-    private final LinkedPath PARENT;
+    protected final LinkedPath PARENT;
     
     //current node
-    private Node current;
-    
-    /*possibility to store the length of PARENT in a variable, allowing recovery
-    of lenght without having to re"parcourir" the whole path*/
-    //private final PARENT_SIZE;
+    protected Node current;
 
     /**
      * CONSTRUCTOR
@@ -32,7 +25,6 @@ public class LinkedPath implements Cloneable, Comparable<LinkedPath> {
     public LinkedPath() {
         this.PARENT = null;
         this.current = null;
-        //PARENT_SIZE = 0;
     }
     
     /**
@@ -45,15 +37,12 @@ public class LinkedPath implements Cloneable, Comparable<LinkedPath> {
     public LinkedPath(LinkedPath parent) {
         this.PARENT = parent;
         this.current = null;
-        
-        //PARENT_SIZE = parent.PARENT_SIZE + 1;
     }
     
     @Override
     public Object clone() throws CloneNotSupportedException{
-        LinkedPath clone = new LinkedPath(this.PARENT);
-        clone.setCurrent(this.current);
-        return (Object) clone;
+        LinkedPath clone = (LinkedPath) super.clone();
+        return clone;
     }
     
     /**
@@ -76,7 +65,6 @@ public class LinkedPath implements Cloneable, Comparable<LinkedPath> {
         } else {
             return this.PARENT.size() + size;
         }
-        //return PARENT_SIZE + size;
     }
     
     @Override
@@ -125,8 +113,8 @@ public class LinkedPath implements Cloneable, Comparable<LinkedPath> {
         this.current = current;
     }
 
-    /** TO FINISH
-     * returns list of all nodes, using a recursive "parcours" of the path
+    /**
+     * returns list of all nodes, using a recursive browsing of the path
      * @return 
      *      list of nodes, first is ultimate ancestor, last is current node
      */
