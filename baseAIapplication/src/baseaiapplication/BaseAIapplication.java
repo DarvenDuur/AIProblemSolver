@@ -16,11 +16,15 @@ public class BaseAIapplication {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) throws CloneNotSupportedException {
-        JugAIProblem pb = new JugAIProblem(3, 5, 4, AIproblemSolver.AIProblem.COST_SEARCH);
+    public static void main(String[] args){
+        JugAIProblem pb = new JugAIProblem(3, 5, 4, AIproblemSolver.AIProblem.WIDTH_SEARCH);
         
         System.out.println(pb.toString());
-        System.out.println(pb.solve().toString(true));
+        try{
+            System.out.println(pb.solve().toString(true));
+        }catch (NullPointerException e){
+            System.out.println("No solution found");
+        }
     }
     
 }

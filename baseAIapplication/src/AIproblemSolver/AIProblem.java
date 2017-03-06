@@ -6,6 +6,7 @@
 package AIproblemSolver;
 
 import static java.lang.Integer.max;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -28,6 +29,8 @@ public class AIProblem <TState extends AbstractState> {
     
     //mode used to add to the tree
     private final String ADD_MODE;
+    //determines usage of speed over memory optimisation
+    private final boolean SPEED_OPTIMISATION;
     
     /* SEARCH MODES
     COST_SEARCH: search by cost, uses compareTo()
@@ -39,6 +42,10 @@ public class AIProblem <TState extends AbstractState> {
     public static final String DEPTH_SEARCH = "depth";
     public static final String WIDTH_SEARCH = "width";
     public static final String A_STAR_SEARCH = "aStarSearch";
+    
+    //array of all the modes using speed over memory optimisation
+    public static final String[] SPEED_OPTIMISATION_ARRAY = new String[]{
+        WIDTH_SEARCH, COST_SEARCH, A_STAR_SEARCH};
 
     /**
      * CONSTRUCTOR
@@ -48,6 +55,9 @@ public class AIProblem <TState extends AbstractState> {
     public AIProblem(TState initState) {
         this.ADD_MODE = "";
         this.INIT_STATE = initState;
+        
+        this.SPEED_OPTIMISATION = (Arrays.binarySearch(SPEED_OPTIMISATION_ARRAY, 0, 
+                SPEED_OPTIMISATION_ARRAY.length, this.ADD_MODE) < 0);
     }
     /**
      * CONSTRUCTOR
@@ -59,6 +69,9 @@ public class AIProblem <TState extends AbstractState> {
     public AIProblem(TState initState, String addMode) {
         this.ADD_MODE = addMode;
         this.INIT_STATE = initState;
+        
+        this.SPEED_OPTIMISATION = (Arrays.binarySearch(SPEED_OPTIMISATION_ARRAY, 0, 
+                SPEED_OPTIMISATION_ARRAY.length, this.ADD_MODE) < 0);
     }
     /**
      * CONSTRUCTOR
@@ -71,6 +84,9 @@ public class AIProblem <TState extends AbstractState> {
         this.ADD_MODE = "default";
         this.actions.addAll(actions);
         this.INIT_STATE = initState;
+        
+        this.SPEED_OPTIMISATION = (Arrays.binarySearch(SPEED_OPTIMISATION_ARRAY, 0, 
+                SPEED_OPTIMISATION_ARRAY.length, this.ADD_MODE) < 0);
     }
     /**
      * CONSTRUCTOR
@@ -85,6 +101,9 @@ public class AIProblem <TState extends AbstractState> {
         this.ADD_MODE = addMode;
         this.actions.addAll(actions);
         this.INIT_STATE = initState;
+        
+        this.SPEED_OPTIMISATION = (Arrays.binarySearch(SPEED_OPTIMISATION_ARRAY, 0, 
+                SPEED_OPTIMISATION_ARRAY.length, this.ADD_MODE) < 0);
     }
     
     /**
@@ -118,7 +137,7 @@ public class AIProblem <TState extends AbstractState> {
      *      goal
      * @throws java.lang.CloneNotSupportedException
      */
-    public Path solve() throws CloneNotSupportedException{
+    public LinkedPath solve(){
         //number of children generated
         int childrenGenerated = 0;
         
@@ -126,11 +145,16 @@ public class AIProblem <TState extends AbstractState> {
         int treeLength = 0, maxTreeLenght = 0;
                 
         //will contain solution path
-        Path path = new Path();
-        path.add(new Node(null, INIT_STATE));
+        LinkedPath path;
+        if (SPEED_OPTIMISATION){
+            path = new LinkedPath();
+        }else{
+            path = new LinkedIntPath();
+        }
+        path.setCurrent(new Node(null, INIT_STATE));
         
         //linearized version of the tree
-        LinkedList<Path> tree=new LinkedList<>();
+        LinkedList<LinkedPath> tree=new LinkedList<>();
         tree.add(path);
         
         //exploredStates: set of already explored states
@@ -158,8 +182,14 @@ public class AIProblem <TState extends AbstractState> {
                     Node node =  applyAction((TState) path.getCurrent().getState(), action);
                     
                     childrenGenerated ++;
-                    Path tempPath = (Path) path.clone();
-                    tempPath.add(node);
+                    LinkedPath tempPath;
+                    
+                    if (SPEED_OPTIMISATION){
+                        tempPath = new LinkedPath(path);
+                    }else{
+                        tempPath = new LinkedIntPath(path);
+                    }
+                    tempPath.setCurrent(node);
                     this.addToTree(tree, tempPath);
                 }
             }
@@ -185,7 +215,7 @@ public class AIProblem <TState extends AbstractState> {
      * @param path 
      *      path to add to the tree
      */
-    private void addToTree(LinkedList<Path> tree, Path path) {
+    private void addToTree(LinkedList<LinkedPath> tree, LinkedPath path) {
         switch (ADD_MODE){
             
             default:

@@ -11,6 +11,7 @@ import java.util.LinkedList;
  * Path listing all states and actions used to reach the current state
  * @author darven
  */
+@Deprecated
 public class Path implements Cloneable, Comparable<Path> {
     private final LinkedList<Node> PATH;
 
