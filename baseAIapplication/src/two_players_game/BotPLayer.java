@@ -12,18 +12,16 @@ import AIproblemSolver.AbstractState;
  *
  * @author mg
  */
-public class BotPLayer extends AbstractPlayer {
-    
+public abstract class BotPLayer extends AbstractPlayer {
+    private MinMax minMax;
 
     public BotPLayer( String NAME) {
         super(NAME);
     }
-
-   
-    
     @Override
     public AbstractState play() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException("Not supported yet."); 
+        //apply the minMax
     }
 
     @Override
